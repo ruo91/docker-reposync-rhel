@@ -1,5 +1,5 @@
 #################################################
-# Title      : RepoSync RHEL                    #
+# Title      : Reposync                         #
 # Date       : 2016.11.03                       #
 # Maintainer : Yongbok Kim (ruo91@yongbok.net)  #
 #################################################
@@ -9,22 +9,20 @@ REPO_VER="rhel-$(cat /etc/redhat-release | awk '{print $7}' | cut -d '.' -f '1')
 REPO_LIST="$REPO_VER-server-rpms $REPO_VER-server-extras-rpms $REPO_VER-server-optional-rpms $REPO_VER-server-rh-common-rpms"
 
 function f_reposync {
-  if [[ -d "$REPO_DIR/$REPO_LIST" ]]; then
-      for repos in ${REPO_LIST}; do
+  for repos in ${REPO_LIST}; do
+      if [[ -d "$REPO_DIR/$repos" ]]; then
           echo "Repo sync..."
           reposync --downloadcomps --download-metadata --newest-only -r $repos $REPO_DIR
           cd $REPO_DIR/$repos && createrepo .
           echo "Done"
-      done
 
-  else
-      for repos in ${REPO_LIST}; do
+      else
           echo "Repo sync..."
           reposync --downloadcomps --download-metadata -r $repos $REPO_DIR
           cd $REPO_DIR/$repos && createrepo .
           echo "Done"
-      done
-  fi
+      fi
+  done
 }
 
 function f_help {
