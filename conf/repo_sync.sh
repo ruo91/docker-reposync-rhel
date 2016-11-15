@@ -13,13 +13,13 @@ function f_reposync {
       if [[ -d "$REPO_DIR/$repos" ]]; then
           echo "Repo sync..."
           reposync --downloadcomps --download-metadata --newest-only -r $repos $REPO_DIR
-          cd $REPO_DIR/$repos && createrepo .
+          cd $REPO_DIR/$repos && createrepo . && cd ..
           echo "Done"
 
       else
           echo "Repo sync..."
           reposync --downloadcomps --download-metadata -r $repos $REPO_DIR
-          cd $REPO_DIR/$repos && createrepo .
+          cd $REPO_DIR/$repos && createrepo . && cd ..
           echo "Done"
       fi
   done
